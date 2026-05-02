@@ -1,37 +1,58 @@
 {
-    "title": "HA workload deployment2",
-    "description": "propagate workload through karmada divided mode",
-    "details": {
-      "intro": {
-        "text": "intro.md",
-        "foreground": "foreground.sh"
-      },
-      "steps": [
-        {
-          "title": "Check member cluster has joined",
-          "text": "step1/text.md",
-          "verify": "step1/verify.sh"
-        },
-        {
-          "title": "create deployment",
-          "text": "step2/text.md",
-          "verify": "step2/verify.sh"
-        },
-        {
-          "title": "Create propagationPolicy and deploy deployment",
-          "text": "step3/text.md",
-          "verify": "step3/verify.sh"
-        },
-        {
-          "title": "Check the status and quantity distribution of pods and deployments",
-          "text": "step4/text.md"
-        }
-      ],
-      "finish": {
-        "text": "finish.md"
-      }
+  "title": "HA Workload — Divided Scheduling (StaticWeight)",
+  "description": "Weighted workload distribution using Divided scheduling with StaticWeight",
+  "details": {
+    "intro": {
+      "text": "intro.md",
+      "foreground": "foreground.sh"
     },
-    "backend": {
-      "imageid": "kubernetes-kubeadm-2nodes"
+    "steps": [
+      {
+        "title": "Environment overview",
+        "text": "step1/text.md",
+        "verify": "step1/verify.sh"
+      },
+      {
+        "title": "Install karmadactl and initialize Karmada",
+        "text": "step2/text.md",
+        "verify": "step2/verify.sh"
+      },
+      {
+        "title": "Prepare member clusters",
+        "text": "step3/text.md",
+        "verify": "step3/verify.sh"
+      },
+      {
+        "title": "Verify member cluster readiness",
+        "text": "step4/text.md",
+        "verify": "step4/verify.sh"
+      },
+      {
+        "title": "Join member clusters",
+        "text": "step5/text.md",
+        "verify": "step5/verify.sh"
+      },
+      {
+        "title": "Create deployment",
+        "text": "step6/text.md",
+        "verify": "step6/verify.sh"
+      },
+      {
+        "title": "Create PropagationPolicy with StaticWeight",
+        "text": "step7/text.md",
+        "verify": "step7/verify.sh"
+      },
+      {
+        "title": "Verify weighted distribution across clusters",
+        "text": "step8/text.md",
+        "verify": "step8/verify.sh"
+      }
+    ],
+    "finish": {
+      "text": "finish.md"
     }
+  },
+  "backend": {
+    "imageid": "kubernetes-kubeadm-2nodes"
   }
+}
