@@ -1,3 +1,5 @@
 #!/bin/bash
+set -e
 
-kubectl --kubeconfig /etc/karmada/karmada-apiserver.config get cluster
+# Verify node01 is reachable
+ssh -o StrictHostKeyChecking=no root@172.30.2.2 "echo node01 ready"
