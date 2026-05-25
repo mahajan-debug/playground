@@ -14,7 +14,11 @@ This outputs the `karmada-apiserver` context, ensuring that it is available and 
 
 ### Enable the Multi-Component Scheduling feature gate
 
-Multi-component scheduling (`MultiplePodTemplatesScheduling`) is currently an **Alpha** feature in Karmada and is **disabled by default**. We need to explicitly enable it on the `karmada-controller-manager`, `karmada-scheduler`, and `karmada-webhook` components.
+Multi-component scheduling (`MultiplePodTemplatesScheduling`) is currently an **Alpha** feature in Karmada and is **disabled by default**. We need to explicitly enable it on three core control plane components to ensure the entire scheduling pipeline can process multi-component workloads:
+
+- **`karmada-webhook`**: Needs the feature gate to successfully validate and mutate the multi-component fields within incoming `ResourceBinding` and `PropagationPolicy` objects.
+- **`karmada-controller-manager`**: Requires it to execute custom Resource Interpreters that extract the specific components, and to build the comprehensive `ResourceBinding` that contains them.
+- **`karmada-scheduler`**: Uses it to compute the aggregate resource requirements of all extracted components, ensuring the selected target cluster has sufficient capacity to host the entire complex workload.
 
 > **Note:** Because these components are running as native Pods on the underlying host cluster, we patch them using the default `kubectl` context, **not** the Karmada API server kubeconfig. We also temporarily change their deployment strategy to `Recreate` to prevent resource deadlocks during the rollout.
 

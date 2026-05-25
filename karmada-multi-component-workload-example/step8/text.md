@@ -6,7 +6,7 @@ First, extract the dynamic binding name into a variable:
 
 RUN `BINDING_NAME=$(kubectl --kubeconfig /etc/karmada/karmada-apiserver.config get resourcebinding -n default -o json | jq -r '.items[] | select(.spec.resource.kind=="FlinkDeployment") | .metadata.name')`{{exec}}
 
-**Verify Component Extraction:**
+#### Replicas
 
 Let's check if Karmada successfully parsed the `spec.components` array. The array should contain exactly 2 distinct components:
 
@@ -20,15 +20,15 @@ RUN `kubectl --kubeconfig /etc/karmada/karmada-apiserver.config get resourcebind
 
 This outputs `"jobmanager"` and `"taskmanager"`.
 
-**Verify Resource Calculation:**
+#### Resource Requirement
 
-The Flink manifest specified `parallelism: 2` and `taskmanager.numberOfTaskSlots: "2"`. Using the Lua interpreter we applied earlier, Karmada correctly calculates that `ceil(2/2) = 1` taskManager replica is needed. Let's verify that Karmada captured this, along with the CPU (1) and memory (100m) requests:
+The Flink manifest specified `parallelism: 2` and `taskmanager.numberOfTaskSlots: "2"`. Using the Lua interpreter we applied earlier, Karmada correctly calculates that `ceil(2/2) = 1` taskManager replica is needed. Let's verify that Karmada captured this, along with the CPU (1) and memory (100Mi) requests:
 
 RUN `kubectl --kubeconfig /etc/karmada/karmada-apiserver.config get resourcebinding $BINDING_NAME -n default -o json | jq '.spec.components[] | select(.name=="taskmanager") | .replicaRequirements.resourceRequest'`{{exec}}
 
-This outputs a JSON object with `"cpu": "1"` and `"memory": "100m"`.
+This outputs a JSON object with `"cpu": "1"` and `"memory": "100Mi"`.
 
-**Verify Scheduling:**
+#### Scheduling Result
 
 Check that the workload was successfully scheduled by the Karmada control plane:
 

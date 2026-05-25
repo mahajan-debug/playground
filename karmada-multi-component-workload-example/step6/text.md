@@ -1,12 +1,12 @@
 ### Provide Workload Definitions to Karmada
 
-Before Karmada can schedule complex Flink and Volcano workloads, it needs to understand their structure. 
+Before Karmada can schedule complex FlinkDeployment workloads, it needs to understand their structure. 
 
 To achieve this, we must do two things:
 1. Apply their **Custom Resource Definitions (CRDs)** to the Karmada control plane and propagate them to the member clusters.
 2. Apply **Resource Interpreter Customizations** to teach Karmada how to extract per-component resource requirements from these specific workload types.
 
-> **Note:** We have pre-downloaded the necessary CRDs and placed them in `/root/examples/` for you.
+> **Note:** Karmada has built-in support for interpreting common third-party multi-component workload resources such as FlinkDeployment and VolcanoJob. They define rules for Karmada to parse these resources, covering extraction of replicas and resource requirements of each component, judgment of workload health status and identification of dependent resources.
 
 **Apply the CRDs and PropagationPolicy:**
 
@@ -46,18 +46,6 @@ spec:
 RUN `kubectl --kubeconfig /etc/karmada/karmada-apiserver.config apply --validate=false -f /root/examples/crd-propagation-policy.yaml`{{exec}}
 
 This applies the ClusterPropagationPolicy to distribute the CRDs.
-
-**Apply the Resource Interpreter Customizations:**
-
-Karmada uses a built-in "Resource Interpreter" to dynamically inspect unfamiliar custom resources. By applying these Lua-based configurations, we teach the interpreter exactly where to look in a `FlinkDeployment` and `VolcanoJob` to find their individual components, replicas, and CPU/Memory requests.
-
-RUN `kubectl --kubeconfig /etc/karmada/karmada-apiserver.config apply -f /root/examples/flink-interpreter.yaml`{{exec}}
-
-This applies the Flink Resource Interpreter Customization.
-
-RUN `kubectl --kubeconfig /etc/karmada/karmada-apiserver.config apply -f /root/examples/volcano-interpreter.yaml`{{exec}}
-
-This applies the Volcano Resource Interpreter Customization.
 
 **Verify CRD Propagation:**
 

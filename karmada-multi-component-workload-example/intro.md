@@ -10,4 +10,4 @@ Many advanced applications are not just simple, identical replicas of a single c
 
 If a multi-cluster scheduler treats these complex jobs as a single generic workload, it may underestimate the total resources required, or accidentally scatter the tightly-coupled components across entirely different geographical clusters, destroying the low-latency communication required for the job to function.
 
-In this scenario, we will deploy multi-component workloads (Flink and Volcano) and use custom Resource Interpreters to teach Karmada how to extract their individual components. We will then use `SpreadConstraints` to ensure all components of a job are scheduled atomistically to the exact same target cluster.
+In this scenario, we will deploy multi-component workloads (FlinkDeployment) and use custom Resource Interpreters to teach Karmada how to extract their individual components. We will then use `SpreadConstraints` to ensure all workload components are scheduled atomistically to the identical target cluster with sufficient resources.

@@ -25,7 +25,7 @@ function createCluster() {
     mv $HOME/.kube/config ~/config-member1
     kind create cluster --name=member2 --config=cluster2.yaml
     mv $HOME/.kube/config config-member2
-    KUBECONFIG=~/config-member1:~/config-member2 kubectl config view --merge --flatten >> ${KUBECONFIG_PATH}/config
+    KUBECONFIG=~/config-member1:~/config-member2 kubectl config view --merge --flatten > ${KUBECONFIG_PATH}/config
     # modify ip
     sed -i "s/${local_ip}/${member_cluster_ip}/g"  config-member1
     # set StrictHostKeyChecking to no to avoid prompting, the same below
@@ -124,7 +124,7 @@ spec:
           local jm_cpu    = get(observedObj, {"spec","jobManager","resource","cpu"})
           local jm_memory = get(observedObj, {"spec","jobManager","resource","memory"})
           if jm_cpu ~= nil then jm_requires.resourceRequest.cpu = jm_cpu end
-          if jm_memory ~= nil then jm_requires.resourceRequest.memory = kube.getResourceQuantity(jm_memory) end
+          if jm_memory ~= nil then jm_requires.resourceRequest.memory = jm_memory end
           table.insert(components, { name = "jobmanager", replicas = jm_replicas, replicaRequirements = jm_requires })
           local tm_replicas = to_num(get(observedObj, {"spec","taskManager","replicas"}), nil)
           if tm_replicas == nil then
@@ -137,7 +137,7 @@ spec:
           local tm_cpu    = get(observedObj, {"spec","taskManager","resource","cpu"})
           local tm_memory = get(observedObj, {"spec","taskManager","resource","memory"})
           if tm_cpu ~= nil then tm_requires.resourceRequest.cpu = tm_cpu end
-          if tm_memory ~= nil then tm_requires.resourceRequest.memory = kube.getResourceQuantity(tm_memory) end
+          if tm_memory ~= nil then tm_requires.resourceRequest.memory = tm_memory end
           table.insert(components, { name = "taskmanager", replicas = tm_replicas, replicaRequirements = tm_requires })
           return components
         end
@@ -216,12 +216,12 @@ spec:
     replicas: 1
     resource:
       cpu: 1
-      memory: 100m
+      memory: 100Mi
   serviceAccount: flink
   taskManager:
     resource:
       cpu: 1
-      memory: 100m
+      memory: 100Mi
 EOF
 
     # Flink PropagationPolicy

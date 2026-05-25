@@ -39,7 +39,7 @@ spec:
 
 RUN `kubectl --kubeconfig /etc/karmada/karmada-apiserver.config apply --validate=false -f /root/examples/flinkdeployment-cr.yaml`{{exec}}
 
-This applies the Flink Custom Resource.
+This applies the FlinkDeployment Custom Resource.
 
 <details>
 <summary>flink-policy.yaml</summary>
